@@ -2,8 +2,8 @@ new Vue({
   el: '#app',
   data: {
     running: false,
-    playerLife: 10,
-    monsterLife: 0
+    playerLife: 100,
+    monsterLife: 100
   },
 
   computed: {
@@ -21,10 +21,29 @@ new Vue({
 
     quitGame() {
       this.running = false
+    },
+
+    attack(especial) {
+      this.hurt('monsterLife', 5, 10, especial)
+      this.hurt('playerLife', 7, 12, false)
+    },
+
+    hurt(atr, min, max, especial) {
+      const plus = especial ? 5 : 0
+      const hurt = this.getRandom(min + plus, max + plus)
+      this[atr] = Math.max(this[atr] - hurt, 0)
+    },
+
+    getRandom(min, max) {
+      const value = Math.random() * (max - min) + min
+      return Math.round(value)
     }
   },
 
   watch: {
-
+    hasResult(value) {
+      if (value)
+        this.running = false
+    }
   }
 })
